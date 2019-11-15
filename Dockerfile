@@ -190,6 +190,10 @@ ENV MORSE_BLENDER=/usr/bin/blender
 ENV MORSE_SILENT_PYTHON_CHECK=1
 ENV NVIDIA_VISIBLE_DEVICES all
 
+WORKDIR /headless/auto_smart_factory
+RUN echo "source /headless/auto_smart_factory/devel/setup.bash" >> /headless/.bashrc
+RUN echo "export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> /headless/.bashrc
+RUN source /headless/.bashrc
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]
