@@ -1,5 +1,5 @@
 # From Ubuntu 16
-FROM ubuntu:xenial
+FROM nvidia/cuda:10.1-devel-ubuntu16.04
 MAINTAINER Shreyas Gokhale, Orhan Can Gorur <orhan-can.goeruer@dai-labor.de>
 
 # install essential packages
@@ -14,29 +14,29 @@ RUN apt-get update && apt-get install -q -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CUDA_RUN http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
+#ENV CUDA_RUN http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
 
-RUN apt-get update && apt-get install -q -y \
-  wget \
-  build-essential 
+#RUN apt-get update && apt-get install -q -y \
+#  wget \
+#  build-essential 
 
-RUN cd /opt && \
-  mkdir nvidia_installers && \
-  cd nvidia_installers && \
-  wget $CUDA_RUN && \
-  chmod +x *.run && \
+#RUN cd /opt && \
+#  mkdir nvidia_installers && \
+#  cd nvidia_installers && \
+#  wget $CUDA_RUN && \
+#  chmod +x *.run && \
   # mkdir nvidia_installers && \
-  #./cuda_10.1.243_418.87.00_linux.run -extract=`pwd`/nvidia_installers && \
-  ./cuda_10.1.243_418.87.00_linux.run --silent
+#RUN ./cuda_10.1.243_418.87.00_linux.run --extract=`pwd`/. && \
+  #./cuda_10.1.243_418.87.00_linux.run --silent
   #cd nvidia_installers && \
-  #./NVIDIA-Linux-x86_64-418.87.run -s -N --no-kernel-module
+#  ./NVIDIA-Linux-x86_64-418.87.run -s -N --no-kernel-module
 
 #RUN cd /opt/nvidia_installers && \
 #  ./cuda-linux64-rel-6.5.14-18749181.run -noprompt
 
 # Ensure the CUDA libs and binaries are in the correct environment variables
-ENV LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64
-ENV PATH=$PATH:/usr/local/cuda-10.1/bin
+#ENV LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64
+#ENV PATH=$PATH:/usr/local/cuda-10.1/bin
 
 # Morse clone
 RUN git clone --progress https://github.com/cangorur/morse.git -b 1.3.1_STABLE 
@@ -66,6 +66,9 @@ RUN apt-get update && apt-get install -y build-essential \
     wget \
     blender \
     mesa-utils\
+    curl\
+    #bzip2 libfreetype6 libgl1-mesa-dev \
+    #libglu1-mesa \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install websocket
