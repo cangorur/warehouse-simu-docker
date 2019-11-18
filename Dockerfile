@@ -27,7 +27,7 @@ RUN cd /opt && \
   chmod +x *.run && \
   # mkdir nvidia_installers && \
   #./cuda_10.1.243_418.87.00_linux.run -extract=`pwd`/nvidia_installers && \
-  ./cuda_10.1.243_418.87.00_linux.run -noprompt
+  ./cuda_10.1.243_418.87.00_linux.run --silent
   #cd nvidia_installers && \
   #./NVIDIA-Linux-x86_64-418.87.run -s -N --no-kernel-module
 
