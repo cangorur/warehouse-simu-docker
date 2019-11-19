@@ -104,6 +104,8 @@ RUN apt-get update && \
 
 # http://www.openrobots.org/morse/doc/1.3/user/installation/mw/ros.html
 
+ENV MORSE_BLENDER=/usr/bin/blender
+
 # Morse clone
 RUN git clone --progress https://github.com/cangorur/morse.git -b 1.3.1_STABLE 
 RUN mkdir /morse/build
@@ -112,6 +114,8 @@ RUN apt-get update &&  apt-get install -y ros-kinetic-rviz \
     && rm -rf /var/lib/apt/lists/*
 RUN cmake -DBUILD_ROS_SUPPORT=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt ..
 RUN make install
+
+RUN morse --noaudio check
 
 WORKDIR /
 
@@ -133,9 +137,6 @@ RUN git clone https://github.com/ros-infrastructure/catkin_pkg.git \
 RUN git clone https://github.com/ros/catkin.git \
     && cd catkin \
     && python3 setup.py install
-
-ENV MORSE_BLENDER=/usr/bin/blender
-RUN morse --noaudio check
 
 LABEL io.k8s.description="Headless VNC Container with Xfce window manager, firefox and chromium" \
       io.k8s.display-name="Headless VNC Container based on Ubuntu" \
