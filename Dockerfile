@@ -115,6 +115,9 @@ RUN apt-get update &&  apt-get install -y ros-kinetic-rviz \
 RUN cmake -DBUILD_ROS_SUPPORT=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt ..
 RUN make install
 
+RUN echo "export PATH=${PATH}:/opt/bin" >> ~/.bashrc
+RUN source ~/.bashrc
+
 RUN morse --noaudio check
 
 WORKDIR /
