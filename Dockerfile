@@ -205,7 +205,7 @@ RUN apt-get update &&  apt-get install -y python3-yaml\
     ros-kinetic-rviz \
     && rm -rf /var/lib/apt/lists/*
 
-RUN cmake ..
+RUN cmake -DBUILD_ROS_SUPPORT=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt ..
 RUN make install
 
 RUN morse --noaudio check
