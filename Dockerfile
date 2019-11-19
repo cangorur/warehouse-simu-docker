@@ -38,10 +38,6 @@ RUN apt-get update && apt-get install -q -y \
 #ENV LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64
 #ENV PATH=$PATH:/usr/local/cuda-10.1/bin
 
-# Morse clone
-RUN git clone --progress https://github.com/cangorur/morse.git -b 1.3.1_STABLE 
-
-
 # We need python 3.5.3 specifically in order to match morse to blender
 RUN apt-get update && apt-get install -y python3 python3-venv python3-dev
 
@@ -108,6 +104,15 @@ RUN apt-get update && \
 
 # http://www.openrobots.org/morse/doc/1.3/user/installation/mw/ros.html
 
+# Morse clone
+RUN git clone --progress https://github.com/cangorur/morse.git -b 1.3.1_STABLE 
+RUN mkdir /morse/build
+WORKDIR /morse/build
+RUN apt-get update &&  apt-get install -y ros-kinetic-rviz \
+    && rm -rf /var/lib/apt/lists/*
+RUN cmake -DBUILD_ROS_SUPPORT=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt ..
+RUN make install
+
 WORKDIR /
 
 RUN wget http://pyyaml.org/download/pyyaml/PyYAML-3.10.tar.gz &&\
@@ -130,8 +135,7 @@ RUN git clone https://github.com/ros/catkin.git \
     && python3 setup.py install
 
 ENV MORSE_BLENDER=/usr/bin/blender
-
-RUN mkdir /morse/build
+RUN morse --noaudio check
 
 LABEL io.k8s.description="Headless VNC Container with Xfce window manager, firefox and chromium" \
       io.k8s.display-name="Headless VNC Container based on Ubuntu" \
@@ -200,21 +204,10 @@ ADD ./vncsetup/src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
 
-WORKDIR /morse/build
-RUN apt-get update &&  apt-get install -y python3-yaml\
-    ros-kinetic-rviz \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN cmake -DBUILD_ROS_SUPPORT=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt ..
-RUN make install
-
-RUN morse --noaudio check
-
-
 WORKDIR /
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 ENV MORSE_BLENDER=/usr/bin/blender
-ENV MORSE_SILENT_PYTHON_CHECK=1
+#ENV MORSE_SILENT_PYTHON_CHECK=1
 ENV NVIDIA_VISIBLE_DEVICES all
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
