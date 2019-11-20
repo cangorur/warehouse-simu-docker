@@ -1,5 +1,5 @@
 # From Ubuntu 16
-FROM nvidia/cuda:10.1-devel-ubuntu16.04
+FROM nvidia/cuda:9.0-devel-ubuntu16.04
 MAINTAINER Shreyas Gokhale, Orhan Can Gorur <orhan-can.goeruer@dai-labor.de>
 
 # install essential packages
