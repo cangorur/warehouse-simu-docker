@@ -118,7 +118,7 @@ RUN make install
 RUN echo "export PATH=${PATH}:/opt/bin" >> ~/.bashrc
 RUN export PATH=${PATH}:/opt/bin
 
-RUN morse --noaudio check
+#RUN morse --noaudio check
 
 WORKDIR /
 
