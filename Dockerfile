@@ -116,7 +116,7 @@ RUN cmake -DBUILD_ROS_SUPPORT=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_BU
 RUN make install
 
 RUN echo "export PATH=${PATH}:/opt/bin" >> ~/.bashrc
-RUN source ~/.bashrc
+RUN export PATH=${PATH}:/opt/bin
 
 RUN morse --noaudio check
 
